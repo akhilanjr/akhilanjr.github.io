@@ -56,9 +56,9 @@ plugins:
   - jekyll-include-cache
 
 author:
-  name   : "First Lastname"
-  avatar : "/assets/images/bio-photo.jpg"
-  bio    : "My awesome biography constrained to a sentence or two goes here."
+  name   : "Akhilan J R"
+  avatar : "/assets/images/ak_profile.jpg"
+  bio    : "Senior Reserarch Associate, J-PAL South Asia. Development econ, building things, painting, a bot of photography and a little cooking here and there."
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"
