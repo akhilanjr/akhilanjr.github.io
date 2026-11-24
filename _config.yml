@@ -33,6 +33,7 @@ author:
   name   : "Akhilan J R"
   avatar : "/assets/images/ak_profile.jpeg"
   bio    : "Senior Research Associate at J-PAL"
+  email  : "akhilanjr@gmail.com"   # shown under the J-PAL link
   links:
     - label: "J-PAL profile"
       icon: "fas fa-fw fa-link"

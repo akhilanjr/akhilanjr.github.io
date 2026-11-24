@@ -1,0 +1,45 @@
+---
+# Overrides the Minimal Mistakes stylesheet. Front matter dashes are required.
+---
+
+@charset "utf-8";
+
+/* Computer Modern everywhere (fonts loaded in _includes/head/custom.html) */
+$serif: "Computer Modern Serif", "Latin Modern Roman", Georgia, serif;
+$sans-serif: $serif;
+$sans-serif-narrow: $serif;
+$monospace: "Computer Modern Typewriter", "Latin Modern Mono", monospace;
+$global-font-family: $serif;
+$header-font-family: $serif;
+
+/* Computer Modern has a small x-height, so step the base size up ~1px
+   at each breakpoint to read like the theme's default. */
+$doc-font-size: 17px;
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
+@import "minimal-mistakes";
+
+/* Keep sizes consistent: the theme shrinks several elements to 0.75em,
+   which looks too small in Computer Modern. */
+.author__bio,
+.author__urls,
+.page__footer,
+.greedy-nav a,
+.page__meta,
+.btn {
+  font-size: $type-size-5 * 0.9;
+}
+
+.author__name {
+  font-size: $type-size-4;
+}
+
+/* CM bold is already heavy; avoid faux-bold extra weight in headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+}
+
+/* Code uses CM Typewriter too */
+code, pre, kbd, samp {
+  font-family: $monospace;
+}
