@@ -9,8 +9,9 @@ classes: wide
   - Every folder inside assets/photography/ becomes a section on this page.
   - Sections are ordered newest first by the year in the folder name
     (anywhere in the name: "Delhi 2022", "2025-kodaikanal", ...).
-  - Photos keep their full frame (no cropping) and are shown in file-name
-    order, with numbers sorted naturally: (2 of 33) comes before (10 of 33).
+  - Photos keep their full frame (no cropping). Within an album they are
+    grouped by shape: wide frames first, then square-ish, then vertical,
+    each group in rows of its own height so verticals aren't shrunk.
   - Optional: put a .txt file in the folder to describe the essay.
     Blank lines separate paragraphs. It appears under the section heading.
   - Dashes and underscores in folder names show up as spaces.
@@ -29,6 +30,8 @@ classes: wide
 <p>Photos coming soon.</p>
 {% endif %}
 
+<noscript><style>.photo-grid { opacity: 1; }</style></noscript>
+
 <div id="albums">
 {% for album in albums %}
 {% assign prefix = "/assets/photography/" | append: album | append: "/" %}
@@ -42,7 +45,7 @@ classes: wide
     {% if f.path contains prefix %}
       {% assign ext = f.extname | downcase %}
       {% if ext == ".jpg" or ext == ".jpeg" or ext == ".png" or ext == ".webp" %}
-    <a href="{{ f.path | relative_url | uri_escape }}" data-name="{{ f.name | escape }}"><img src="{{ f.path | relative_url | uri_escape }}" alt="{{ f.basename | escape }}" loading="lazy"></a>
+    <a href="{{ f.path | relative_url | uri_escape }}" data-name="{{ f.name | escape }}"><img src="{{ f.path | relative_url | uri_escape }}" alt="{{ f.basename | escape }}"></a>
       {% endif %}
     {% endif %}
   {% endfor %}
@@ -65,20 +68,121 @@ classes: wide
     })
     .forEach(function (s) { box.appendChild(s); });
 
-  // 2. Photos: natural file-name order, full frame, justified rows
-  document.querySelectorAll(".photo-grid").forEach(function (grid) {
-    Array.from(grid.querySelectorAll("a"))
-      .sort(function (a, b) { return natural.compare(a.dataset.name, b.dataset.name); })
-      .forEach(function (a) { grid.appendChild(a); });
-  });
-  function fit(img) {
-    if (!img.naturalWidth) return;
-    var r = img.naturalWidth / img.naturalHeight;
-    img.parentNode.style.flexGrow = r;
-    img.parentNode.style.flexBasis = (r * 240) + "px";
+  // 2. Photos: grouped by shape (wide -> square -> vertical), full frame,
+  //    justified rows; each group gets its own row height so verticals
+  //    aren't shrunk. A short leftover row joins the row above it.
+  var SHAPES = [
+    { name: "wide",   min: 1.15, height: 260 },   // landscape
+    { name: "square", min: 0.87, height: 320 },   // near-square / cropped
+    { name: "tall",   min: 0,    height: 420 }    // portrait
+  ];
+  var GAP = 6;
+
+  function loaded(img) {
+    return new Promise(function (done) {
+      if (img.complete) return done();
+      img.addEventListener("load", done); img.addEventListener("error", done);
+    });
   }
-  document.querySelectorAll(".photo-grid img").forEach(function (img) {
-    if (img.complete) fit(img); else img.addEventListener("load", function () { fit(img); });
+
+  // Split photos into rows that fill the width at close to the target height
+  function sumRatio(r) { return r.reduce(function (t, a) { return t + a.ratio; }, 0); }
+  function rowHeight(r, W) { return (W - GAP * (r.length - 1)) / sumRatio(r); }
+
+  function layoutRows(container, items, target) {
+    container.replaceChildren();                  // clear old rows before measuring
+    var W = container.clientWidth;
+    var rows = [], row = [];
+    if (W < 560) {                                // phones: one photo per row, full width
+      items.forEach(function (a) { rows.push([a]); });
+      items = [];
+    }
+    items.forEach(function (a) {
+      var withIt = row.concat([a]);
+      if (row.length && rowHeight(withIt, W) < target) {
+        // Adding this photo overfills the row: keep whichever height is closer
+        if (Math.abs(rowHeight(withIt, W) - target) <= Math.abs(rowHeight(row, W) - target)) {
+          rows.push(withIt); row = [];
+        } else {
+          rows.push(row); row = [a];
+        }
+      } else {
+        row = withIt;
+      }
+    });
+    if (row.length) {
+      // Leftover photos: try (a) leaving them as a short last row, (b) merging
+      // them into the row above, (c) re-splitting the last two rows; keep the
+      // option whose row heights stay closest to the target.
+      var prev = rows.length ? rows[rows.length - 1] : null;
+      var leftover = row.slice();
+      leftover.partial = true;
+      var best = { cost: rowHeight(row, W) >= target ? 0.3 * target : Math.max(0.3 * target, target - rowHeight(row, W)),
+                   rows: [leftover] };
+      if (prev) {
+        var both = prev.concat(row);
+        var merged = Math.abs(rowHeight(both, W) - target);
+        if (merged < best.cost) best = { cost: merged, rows: [both], replace: true };
+        for (var c = 1; c < both.length; c++) {
+          var r1 = both.slice(0, c), r2 = both.slice(c);
+          var cost = Math.max(Math.abs(rowHeight(r1, W) - target), Math.abs(rowHeight(r2, W) - target));
+          if (cost < best.cost) best = { cost: cost, rows: [r1, r2], replace: true };
+        }
+      }
+      if (best.replace) rows.pop();
+      rows = rows.concat(best.rows);
+    }
+    rows.forEach(function (r) {
+      var h = rowHeight(r, W);
+      if (r.partial) h = Math.min(h, target);
+      var line = document.createElement("div");
+      line.className = "photo-row";
+      r.forEach(function (a) {
+        a.style.width = (a.ratio * h) + "px";
+        a.style.height = h + "px";
+        line.appendChild(a);
+      });
+      container.appendChild(line);
+    });
+  }
+
+  document.querySelectorAll(".photo-grid").forEach(function (grid) {
+    var links = Array.from(grid.querySelectorAll("a"));
+    Promise.all(links.map(function (a) { return loaded(a.querySelector("img")); })).then(function () {
+      links.forEach(function (a) {
+        var img = a.querySelector("img");
+        a.ratio = img.naturalWidth ? img.naturalWidth / img.naturalHeight : 1.5;
+      });
+      links.sort(function (a, b) {
+        return (b.ratio - a.ratio) || natural.compare(a.dataset.name, b.dataset.name);
+      });
+      grid.replaceChildren();
+      var groups = [];
+      SHAPES.forEach(function (shape, i) {
+        var upper = i ? SHAPES[i - 1].min : Infinity;
+        var items = links.filter(function (a) { return a.ratio >= shape.min && a.ratio < upper; });
+        if (!items.length) return;
+        var box = document.createElement("div");
+        box.className = "photo-rows photo-rows--" + shape.name;
+        grid.appendChild(box);
+        groups.push({ box: box, items: items, height: shape.height });
+      });
+      function draw() { groups.forEach(function (g) { layoutRows(g.box, g.items, g.height); }); }
+      draw();
+      grid.classList.add("is-ready");
+
+      // Redraw whenever the album's width changes (window resize, phone rotation)
+      var lastWidth = grid.clientWidth, pending = false;
+      new ResizeObserver(function () {
+        if (pending || grid.clientWidth === lastWidth) return;
+        pending = true;
+        requestAnimationFrame(function () {
+          pending = false;
+          lastWidth = grid.clientWidth;
+          draw();
+        });
+      }).observe(grid);
+    });
   });
 
   // 3. Essay text from the folder's .txt file
