@@ -1,141 +1,236 @@
-% ============================================================
-%  Akhilan J R — Curriculum Vitae
-%  Edit this file and push. GitHub Actions compiles it and the
-%  new PDF appears at https://akhilanjr.github.io/cv/
-% ============================================================
-\documentclass[11pt,a4paper]{article}
+%===============================================================================
+%  Akhilan J R — Curriculum Vitae (Awesome-CV template)
+%
+%  Edit this file and push to GitHub. The "Build CV and site" workflow compiles
+%  it with LuaLaTeX and publishes the PDF at https://akhilanjr.github.io/cv/
+%
+%  Template: Awesome-CV by Byungjin Park (LPPL 1.3c), fetched at build time.
+%===============================================================================
+\documentclass[11pt, a4paper]{awesome-cv}
+\usepackage{needspace}
+\let\origcvsection\cvsection
+\renewcommand{\cvsection}[1]{\needspace{8\baselineskip}\origcvsection{#1}}
 
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}                 % classic Computer Modern look
-\usepackage[margin=2.5cm]{geometry}
-\usepackage{microtype}
-\usepackage{titlesec}
-\usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
+\geometry{left=1.6cm, top=1.2cm, right=1.6cm, bottom=1.8cm, footskip=.5cm}
 
-\pagestyle{plain}                    % page numbers at the foot
-\setlength{\parindent}{0pt}
+% Accent colour. Options: awesome-emerald, awesome-skyblue, awesome-red,
+% awesome-pink, awesome-orange, awesome-nephritis, awesome-concrete, awesome-darknight
+\colorlet{awesome}{awesome-skyblue}
+\setbool{acvSectionColorHighlight}{true}
+\renewcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
 
-% Section headings: plain small caps, no colour, no rules
-\titleformat{\section}{\large\scshape}{}{0pt}{}
-\titlespacing*{\section}{0pt}{1.4em}{0.6em}
-
-% Dated list: dates hang in the left margin column
-\newenvironment{dated}%
-  {\begin{list}{}{%
-     \setlength{\leftmargin}{3cm}%
-     \setlength{\labelwidth}{2.8cm}%
-     \setlength{\labelsep}{0.2cm}%
-     \setlength{\itemsep}{0.6em}%
-     \setlength{\topsep}{0pt}%
-     \renewcommand{\makelabel}[1]{##1\hfil}}}%
-  {\end{list}}
-
-% Compact sub-bullets inside an entry
-\setlist[itemize]{leftmargin=1.1em, label=--, itemsep=0pt, topsep=2pt, parsep=0pt}
+%-------------------------------------------------------------------------------
+%  Personal details
+%-------------------------------------------------------------------------------
+\name{Akhilan}{J R}
+\position{Senior Research Associate{\enskip\cdotp\enskip}J-PAL South Asia}
+\address{Chennai, Tamil Nadu, India}
+\mobile{(+91) 94446 42711}
+\email{akhilan.rengaswamy@ifmr.ac.in}
+\homepage{akhilanjr.github.io}
+\github{akhilanjr}
 
 \begin{document}
 
-% ---------------- Header ----------------
-\begin{center}
-  {\LARGE\scshape Akhilan J R}\\[6pt]
-  % TODO: update title — this CV was last edited June 2024
-  Senior Research Associate, J-PAL South Asia\\[2pt]
-  \href{mailto:akhilan.rengaswamy@ifmr.ac.in}{akhilan.rengaswamy@ifmr.ac.in}
-  \quad$\cdot$\quad +91 94446 42711
-  \quad$\cdot$\quad \href{https://akhilanjr.github.io}{akhilanjr.github.io}
-\end{center}
+\makecvheader
 
-% ---------------- Education ----------------
-\section*{Education}
-\begin{dated}
-  \item[2020--2022] \textbf{MA in Public Policy}, O.P. Jindal Global University
-  \begin{itemize}
-    \item Capstone with The Asia Foundation on the USAID--India Triangular
-          Development Partnership (TriDeP) Programme: report on innovative finance
-          models for the long-term financial sustainability of proposed projects,
-          and action reports to support program design.
-    \item Coursework: International Development Finance and South-South
-          Cooperation; Microeconomics of International Development; Dynamics of
-          Global Change and Local Responses.
-    \item Research papers: ``How the COVID pandemic affected substance consumption
-          in students''; ``Association between Democracy, Security and Peace''.
-  \end{itemize}
+\makecvfooter
+  {Updated \today}
+  {Akhilan J R~~~·~~~Curriculum Vitae}
+  {\thepage}
 
-  \item[2017--2020] \textbf{BA in Journalism, Psychology and English},
-        CHRIST (Deemed to be University)
-\end{dated}
+%-------------------------------------------------------------------------------
+\cvsection{Summary}
+%-------------------------------------------------------------------------------
 
-% ---------------- J-PAL ----------------
-\section*{Research Experience}
-\begin{dated}
-  \item[2023--present] \textbf{Research Associate}, J-PAL South Asia\\
-  \textit{Identifying and Nurturing Math Talent}
-  \begin{itemize}
-    \item Developed the research design through piloting; wrote standard operating
-          procedures and designed operational solutions using available technology.
-    \item Planned and allotted weekly tasks for the project team; managed over 100
-          surveyors during screening.
-    \item Prepared field plans and trained survey staff to collect data across 10
-          districts of Tamil Nadu; designed survey forms and data-entry portals for
-          participant engagement data.
-    \item Built high-frequency data-quality checks and a dashboard giving the
-          research team daily engagement statistics and analyses.
-    \item Organised phone-survey teams to monitor treatment groups.
-    \item Liaised with the Tamil Nadu School Education Department on permissions and
-          program design; managed survey and intervention vendors.
-  \end{itemize}
+\begin{cvparagraph}
+Public policy and empirical research professional with experience leading
+large-scale randomized controlled trials (RCTs), government partnerships, and
+multi-state education pilots at J-PAL South Asia. Works in experimental research
+design, administrative data linkage, field operations management, and policy
+engagement across Tamil Nadu and Maharashtra, alongside Principal Investigators
+from MIT and J-PAL.
+\end{cvparagraph}
 
-  \item[2023] \textbf{Research Associate}, J-PAL South Asia\\
-  \textit{Gay Rights in India}
-  \begin{itemize}
-    \item Piloted assessments to develop the survey design.
-    \item Trained and managed field staff, prepared field plans and carried out data
-          collection, with high-frequency and data-quality checks.
-    \item Procured a large volume of goods for distribution to participants.
-  \end{itemize}
-\end{dated}
+%-------------------------------------------------------------------------------
+\cvsection{Experience}
+%-------------------------------------------------------------------------------
 
-% ---------------- Previous ----------------
-\section*{Other Experience}
-\begin{dated}
-  \item[2021] \textbf{The Asia Foundation}, India Development Partnership Activity\\
-  Action reports for the USAID--TAF initiative on India's development footprint in
-  South-East Asia and the Pacific Island Countries in renewable energy, disaster risk
-  resilience and climate-smart agriculture.
+\begin{cventries}
 
-  \item[2021] \textbf{Research Assistant}, The Asia Foundation\\
-  Profile of Indian foreign aid recipients in South Asia, Indian multilateralism, and
-  China's aid policy since mid-2019.
+  \cventry
+    {Senior Research Associate}
+    {J-PAL South Asia at IFMR}
+    {Chennai, India}
+    {Sep. 2023 -- Present}  % TODO: confirm start date
+    {
+      \begin{cvitems}
+        \item {\textbf{Project leadership \& experimental design.} Lead research
+          operations and policy coordination for \textit{Identifying and Nurturing
+          Math Talent at Scale} (with MIT PIs Esther Duflo, Glenn Ellison, Sara
+          Ellison, Phi Adajar and Harini Kannan), evaluating self-paced Art of
+          Problem Solving (AoPS) online courses and tutoring for 2,492+ government
+          school students across 10 districts of Tamil Nadu.}
+        \item {\textbf{Program expansion \& pilot design.} Authored research
+          proposals and protocols to expand the study to Grades 4--6 (foundational
+          math and communicative English) and Grades 11--12 (board and college
+          entrance preparation) in Tamil Nadu, and a Grades 7--10 pilot in
+          Maharashtra with MSCERT.}
+        \item {\textbf{Government \& stakeholder engagement.} Drafted Data Access
+          Requests, MoUs and briefing decks for senior officials including the
+          Secretary of School Education, Director of School Education, State
+          Project Director (Samagra Shiksha) and SCERT.}
+        \item {\textbf{Data pipelines \& technology.} Oversaw automated data
+          scraping and processing pipelines (Python, R, Shiny) tracking daily
+          student engagement; built streak and leaderboard systems over the
+          WhatsApp Business API; evaluated Mobile Device Management (MDM) solutions.}
+        \item {\textbf{Compliance, IRB \& team management.} Managed end-to-end IRB
+          submissions (IFMR and MIT), FCRA field audit verifications, vendor
+          contracting, budgeting, and recruitment and mentoring of Research and
+          Project Associates.}
+      \end{cvitems}
+    }
 
-  \item[2019] \textbf{Reporter}, News18 Tamil Nadu, Chennai\\
-  Broadcast news reporting.
+  \cventry
+    {Research Associate}
+    {J-PAL South Asia at IFMR}
+    {India}
+    {Feb. 2023 -- Aug. 2023}
+    {
+      \begin{cvitems}
+        \item {\textbf{Gay Rights in India.} Contributed to an empirical evaluation
+          of the impact of LGBTQ laws on social attitudes and behaviour: piloted
+          assessments for survey design, trained and managed field staff, and ran
+          high-frequency data-quality checks.}
+      \end{cvitems}
+    }
 
-  \item[2018] \textbf{Reporter}, The New Indian Express, Thiruvananthapuram\\
-  Features, news and political reports, including a special report on the Malayali
-  diaspora in Kanyakumari.
-\end{dated}
+  \cventry
+    {Consultant}
+    {The Asia Foundation}
+    {India}
+    {2021}
+    {
+      \begin{cvitems}
+        \item {Worked on the India--U.S. Triangular Development Partnership (TriDeP)
+          program, supporting cross-border development cooperation initiatives.}
+        \item {Prepared action reports for the India Development Partnership Activity
+          on India's development footprint in South-East Asia and the Pacific
+          Islands (renewable energy, disaster risk resilience, climate-smart
+          agriculture); profiled Indian foreign aid recipients and China's aid policy.}
+      \end{cvitems}
+    }
 
-% ---------------- Articles ----------------
-\section*{Published Articles}
-\begin{dated}
-  \item[2021] ``Increasing Age of Marriage: Do Women Stand to Gain Anything?''
-        \textit{NewsClick}, 8 March.
-        \href{https://www.newsclick.in/Increasing-AgeMarriage-Do-Women-Stand-Gain-Anything}{[link]}
-  \item[2018] ``Kanyakumari's Malayali diaspora in a quandary.''
-        \textit{The New Indian Express}, 22 May.
-  \item[2018] ``Innovation hub cries for visitors.''
-        \textit{The New Indian Express}, 14 May.
-        \href{http://www.newindianexpress.com/Author/Akhilan-J-R/archive}{[archive]}
-\end{dated}
+  \cventry
+    {Reporter}
+    {The New Indian Express; News18 Tamil Nadu}
+    {Thiruvananthapuram; Chennai}
+    {2018 -- 2019}
+    {
+      \begin{cvitems}
+        \item {Reported features, news and political stories, including a special
+          report on the Malayali diaspora in Kanyakumari.}
+      \end{cvitems}
+    }
 
-% ---------------- Skills ----------------
-\section*{Skills}
-\begin{dated}
-  \item[Programming] R, Python (workflow automation, web scraping), Stata, MS Excel
-  \item[Design] Adobe Creative Cloud
-  \item[Operations] Managing large-scale survey teams; setting up research
-        operations systems
-\end{dated}
+\end{cventries}
+
+%-------------------------------------------------------------------------------
+\cvsection{Education}
+%-------------------------------------------------------------------------------
+
+\begin{cventries}
+
+  \cventry
+    {M.A. in Public Policy}
+    {O.P. Jindal Global University}
+    {Sonipat, India}
+    {2020 -- 2022}
+    {
+      \begin{cvitems}
+        \item {Capstone with The Asia Foundation on the USAID--India TriDeP
+          programme: innovative finance models for the long-term sustainability of
+          proposed projects.}
+      \end{cvitems}
+    }
+
+  \cventry
+    {B.A. in Journalism, Psychology and English}
+    {CHRIST (Deemed to be University)}
+    {Bengaluru, India}
+    {2017 -- 2020}
+    {}
+
+\end{cventries}
+
+%-------------------------------------------------------------------------------
+\cvsection{Research Interests \& Proposals}
+%-------------------------------------------------------------------------------
+
+\begin{cventries}
+
+  \cventry
+    {Doctoral research proposal}
+    {Supporting First Generation Learners in Tamil Nadu's Primary Schools}
+    {}
+    {}
+    {
+      \begin{cvitems}
+        \item {Uses longitudinal administrative data (SLAS, school exams) and proposes
+          an RCT evaluating community tutoring and multilingual voice-based AI bots to
+          bridge home-input gaps for first-generation learners.}
+      \end{cvitems}
+    }
+
+\end{cventries}
+
+\begin{cvskills}
+  \cvskill
+    {Areas of focus}
+    {Economics of education, experimental methods (RCTs), EdTech \& AI for
+     development, state capacity, administrative data systems}
+\end{cvskills}
+
+%-------------------------------------------------------------------------------
+\cvsection{Skills}
+%-------------------------------------------------------------------------------
+
+\begin{cvskills}
+  \cvskill
+    {Programming}
+    {R, Stata, Python}
+  \cvskill
+    {Data collection}
+    {SurveyCTO, focus group discussions, key informant interviews}
+  \cvskill
+    {Research operations}
+    {RCT design, IRB/ethics compliance, grant \& proposal writing, government
+     liaison, field team management, budgeting \& procurement}
+  \cvskill
+    {Languages}
+    {English, Tamil}
+\end{cvskills}
+
+%-------------------------------------------------------------------------------
+\cvsection{Writing}
+%-------------------------------------------------------------------------------
+
+\begin{cvhonors}
+  \cvhonor
+    {``Increasing Age of Marriage: Do Women Stand to Gain Anything?''}
+    {NewsClick}
+    {}
+    {Mar. 2021}
+  \cvhonor
+    {``Kanyakumari's Malayali diaspora in a quandary''}
+    {The New Indian Express}
+    {}
+    {May 2018}
+  \cvhonor
+    {``Innovation hub cries for visitors''}
+    {The New Indian Express}
+    {}
+    {May 2018}
+\end{cvhonors}
 
 \end{document}
