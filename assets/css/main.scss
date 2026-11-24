@@ -62,3 +62,28 @@ code, pre, kbd, samp {
   aspect-ratio: 1 / 1;
   object-fit: cover;
 }
+
+/* CV page: PDF pages drawn as paper sheets */
+.cv-actions {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+.cv-sheet {
+  position: relative;
+  margin: 0 0 1.5em;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+.cv-sheet canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.cv-link {
+  position: absolute;
+}
+.cv-link:hover {
+  background: rgba(31, 78, 121, 0.08);
+}

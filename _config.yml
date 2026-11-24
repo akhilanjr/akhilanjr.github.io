@@ -11,6 +11,10 @@ markdown: kramdown
 remote_theme: mmistakes/minimal-mistakes
 timezone: Asia/Kolkata
 
+# Don't turn a page's first heading into a duplicate page title
+titles_from_headings:
+  enabled: false
+
 include:
   - _pages
 

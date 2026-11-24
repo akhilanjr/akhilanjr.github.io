@@ -1,0 +1,80 @@
+---
+title: "CV"
+permalink: /cv/
+classes: wide
+---
+
+{% assign cv = "/assets/files/Akhilan_J_R_CV.pdf" | relative_url %}
+{% assign v = site.time | date: "%s" %}
+
+<p class="cv-actions">
+  <a class="btn btn--primary" href="{{ cv }}?v={{ v }}">Download PDF</a>
+  <small>Last updated {{ site.time | date: "%-d %B %Y" }}</small>
+</p>
+
+<!-- Each CV page is drawn here as a sheet of paper (PDF.js). -->
+<div id="cv-pages" data-src="{{ cv }}?v={{ v }}">
+  <p class="cv-fallback">Loading CV… If it doesn't appear, <a href="{{ cv }}">open the PDF</a>.</p>
+</div>
+
+<script type="module">
+  // PDF.js, pinned version
+  const base = "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.5.438/build/";
+  const pdfjs = await import(base + "pdf.min.mjs");
+  pdfjs.GlobalWorkerOptions.workerSrc = base + "pdf.worker.min.mjs";
+
+  const box = document.getElementById("cv-pages");
+  const pdf = await pdfjs.getDocument({ url: box.dataset.src }).promise;
+
+  async function draw() {
+    const width = box.clientWidth;
+    const dpr = Math.max(window.devicePixelRatio || 1, 2);   // sharp text
+    const sheets = [];
+
+    for (let n = 1; n <= pdf.numPages; n++) {
+      const page = await pdf.getPage(n);
+      const base1 = page.getViewport({ scale: 1 });
+      const vp = page.getViewport({ scale: (width / base1.width) * dpr });
+
+      const sheet = document.createElement("div");
+      sheet.className = "cv-sheet";
+      const canvas = document.createElement("canvas");
+      canvas.width = vp.width;
+      canvas.height = vp.height;
+      sheet.appendChild(canvas);
+
+      await page.render({ canvas, canvasContext: canvas.getContext("2d"), viewport: vp }).promise;
+
+      // Keep the PDF's links clickable
+      const css = page.getViewport({ scale: width / base1.width });
+      for (const a of await page.getAnnotations()) {
+        if (a.subtype !== "Link" || !a.url) continue;
+        const [x1, y1] = css.convertToViewportPoint(a.rect[0], a.rect[1]);
+        const [x2, y2] = css.convertToViewportPoint(a.rect[2], a.rect[3]);
+        const link = document.createElement("a");
+        link.href = a.url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.className = "cv-link";
+        Object.assign(link.style, {
+          left: Math.min(x1, x2) + "px", top: Math.min(y1, y2) + "px",
+          width: Math.abs(x2 - x1) + "px", height: Math.abs(y2 - y1) + "px",
+        });
+        sheet.appendChild(link);
+      }
+      sheets.push(sheet);
+    }
+    box.replaceChildren(...sheets);
+  }
+
+  await draw();
+
+  // Redraw if the window width changes (e.g. phone rotation)
+  let lastWidth = box.clientWidth, timer;
+  window.addEventListener("resize", () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (box.clientWidth !== lastWidth) { lastWidth = box.clientWidth; draw(); }
+    }, 250);
+  });
+</script>
