@@ -49,18 +49,29 @@ code, pre, kbd, samp {
   text-align: left;
 }
 
-/* Photography page: square thumbnails that open in a lightbox */
+/* Photography page: justified rows, full frame (no cropping).
+   Each photo's width is set from its proportions by the page script. */
 .photo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.5em;
-  margin-bottom: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 2.5em;
+}
+.photo-grid a {
+  flex: 1 1 240px;            /* until the photo loads */
 }
 .photo-grid img {
   display: block;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
+  height: auto;
+}
+.photo-grid::after {          /* keep the last row from stretching */
+  content: "";
+  flex-grow: 1000000;
+}
+.album-text {
+  max-width: 42em;
+  margin-bottom: 1em;
 }
 
 /* CV page: PDF pages drawn as paper sheets */
