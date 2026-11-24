@@ -1,0 +1,41 @@
+---
+title: "Photography"
+permalink: /photography/
+---
+
+{% comment %}
+  HOW THIS PAGE WORKS
+  Every folder inside assets/photography/ becomes a section on this page,
+  newest first if you start folder names with a year (e.g. 2025-kodaikanal).
+  Dashes and underscores in folder names show up as spaces.
+  Just add a folder of .jpg/.png/.webp files, commit and push.
+{% endcomment %}
+
+{% assign albums = "" | split: "" %}
+{% for f in site.static_files %}
+  {% if f.path contains "/assets/photography/" %}
+    {% assign rel = f.path | remove_first: "/assets/photography/" %}
+    {% assign parts = rel | split: "/" %}
+    {% if parts.size > 1 %}{% assign albums = albums | push: parts[0] %}{% endif %}
+  {% endif %}
+{% endfor %}
+{% assign albums = albums | uniq | sort | reverse %}
+
+{% if albums.size == 0 %}
+Photos coming soon.
+{% endif %}
+
+{% for album in albums %}
+{% assign prefix = "/assets/photography/" | append: album | append: "/" %}
+<h2 id="{{ album | slugify }}">{{ album | replace: "-", " " | replace: "_", " " }}</h2>
+<div class="photo-grid">
+{% for f in site.static_files %}
+  {% if f.path contains prefix %}
+    {% assign ext = f.extname | downcase %}
+    {% if ext == ".jpg" or ext == ".jpeg" or ext == ".png" or ext == ".webp" %}
+  <a href="{{ f.path | relative_url | uri_escape }}"><img src="{{ f.path | relative_url | uri_escape }}" alt="{{ f.basename }}" loading="lazy"></a>
+    {% endif %}
+  {% endif %}
+{% endfor %}
+</div>
+{% endfor %}
