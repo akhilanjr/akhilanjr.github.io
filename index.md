@@ -3,6 +3,8 @@ layout: single
 author_profile: true
 ---
 
+## Work at J-PAL
+
 **Identifying and Nurturing Math Talent at Scale** (2023–present). I run research operations for this RCT with Esther Duflo, Glenn Ellison, Sara Ellison, Phi Adajar and Harini Kannan. It evaluates self-paced Art of Problem Solving (AoPS) online courses and tutoring for about 2,500 government school students across 10 districts of Tamil Nadu, with pilots extending it to Grades 4–6 and 11–12 in Tamil Nadu and to Grades 7–10 in Maharashtra with MSCERT.
 
 **Silence to Solidarity: Using Group Dynamics to Reduce Anti-Transgender Discrimination in India** (2023). With PI Duncan Webb, I ran the fieldwork: piloting the survey instruments, training and managing field staff, and running data collection with high-frequency quality checks.
