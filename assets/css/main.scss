@@ -49,25 +49,37 @@ code, pre, kbd, samp {
   text-align: left;
 }
 
-/* Photography page: justified rows, full frame (no cropping).
-   Each photo's width is set from its proportions by the page script. */
+/* Photography page: full frame (no cropping). The page script groups each
+   album by shape (wide -> square -> vertical) into justified rows. */
 .photo-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  overflow: hidden;           /* rows never stretch the page */
+  min-width: 0;
+  contain: inline-size;
   margin-bottom: 2.5em;
+  min-height: 200px;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
-.photo-grid a {
-  flex: 1 1 240px;            /* until the photo loads */
+.photo-grid.is-ready {
+  opacity: 1;
+  min-height: 0;
 }
-.photo-grid img {
+.photo-rows {
+  margin-bottom: 6px;
+}
+.photo-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.photo-row a {
+  flex: none;
+  display: block;
+}
+.photo-row img {
   display: block;
   width: 100%;
-  height: auto;
-}
-.photo-grid::after {          /* keep the last row from stretching */
-  content: "";
-  flex-grow: 1000000;
+  height: 100%;
 }
 .album-text {
   max-width: 42em;
