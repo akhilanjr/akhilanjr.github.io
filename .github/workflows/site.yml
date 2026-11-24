@@ -1,10 +1,12 @@
-# Compiles cv/cv.tex to PDF, builds the Jekyll site, and publishes it.
-# Runs on every push. One-time setup: Settings -> Pages -> Source = "GitHub Actions".
+# Compiles cv/cv.tex (Awesome-CV, LuaLaTeX) to PDF, builds the Jekyll site,
+# and publishes it. One-time setup: Settings -> Pages -> Source = "GitHub Actions".
+# Pull requests run the build (to catch LaTeX errors) but don't publish.
 name: Build CV and site
 
 on:
   push:
     branches: [main, master]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -13,27 +15,54 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  cv:
+    runs-on: ubuntu-latest
+    container: texlive/texlive:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install CV fonts (Roboto, Source Sans 3)
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends curl ca-certificates
+          apt-get install -y --no-install-recommends fonts-roboto fonts-adobe-sourcesans3 \
+            || echo "Font packages unavailable; falling back to TeX Live's copies"
+
+      - name: Fetch Awesome-CV class (pinned version)
+        working-directory: cv
+        run: |
+          [ -f awesome-cv.cls ] || curl -fsSL -o awesome-cv.cls \
+            https://raw.githubusercontent.com/posquit0/Awesome-CV/dfe863541ccc6ea624c48338a7ce550494530b31/awesome-cv.cls
+
+      - name: Compile CV with LuaLaTeX
+        working-directory: cv
+        run: latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error cv.tex
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cv-pdf
+          path: cv/cv.pdf
+
   build:
+    needs: cv
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compile CV (LaTeX)
-        uses: xu-cheng/latex-action@v3
+      - uses: actions/download-artifact@v4
         with:
-          root_file: cv.tex
-          working_directory: cv
+          name: cv-pdf
+          path: assets/files
 
-      - name: Copy CV PDF into the site
-        run: |
-          mkdir -p assets/files
-          cp cv/cv.pdf assets/files/Akhilan_J_R_CV.pdf
+      - name: Name the CV file
+        run: mv assets/files/cv.pdf assets/files/Akhilan_J_R_CV.pdf
 
       - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
 
       - name: Build Jekyll site
         uses: actions/jekyll-build-pages@v1
@@ -44,6 +73,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
