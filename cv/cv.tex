@@ -1,0 +1,141 @@
+% ============================================================
+%  Akhilan J R — Curriculum Vitae
+%  Edit this file and push. GitHub Actions compiles it and the
+%  new PDF appears at https://akhilanjr.github.io/cv/
+% ============================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}                 % classic Computer Modern look
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\pagestyle{plain}                    % page numbers at the foot
+\setlength{\parindent}{0pt}
+
+% Section headings: plain small caps, no colour, no rules
+\titleformat{\section}{\large\scshape}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.4em}{0.6em}
+
+% Dated list: dates hang in the left margin column
+\newenvironment{dated}%
+  {\begin{list}{}{%
+     \setlength{\leftmargin}{3cm}%
+     \setlength{\labelwidth}{2.8cm}%
+     \setlength{\labelsep}{0.2cm}%
+     \setlength{\itemsep}{0.6em}%
+     \setlength{\topsep}{0pt}%
+     \renewcommand{\makelabel}[1]{##1\hfil}}}%
+  {\end{list}}
+
+% Compact sub-bullets inside an entry
+\setlist[itemize]{leftmargin=1.1em, label=--, itemsep=0pt, topsep=2pt, parsep=0pt}
+
+\begin{document}
+
+% ---------------- Header ----------------
+\begin{center}
+  {\LARGE\scshape Akhilan J R}\\[6pt]
+  % TODO: update title — this CV was last edited June 2024
+  Senior Research Associate, J-PAL South Asia\\[2pt]
+  \href{mailto:akhilan.rengaswamy@ifmr.ac.in}{akhilan.rengaswamy@ifmr.ac.in}
+  \quad$\cdot$\quad +91 94446 42711
+  \quad$\cdot$\quad \href{https://akhilanjr.github.io}{akhilanjr.github.io}
+\end{center}
+
+% ---------------- Education ----------------
+\section*{Education}
+\begin{dated}
+  \item[2020--2022] \textbf{MA in Public Policy}, O.P. Jindal Global University
+  \begin{itemize}
+    \item Capstone with The Asia Foundation on the USAID--India Triangular
+          Development Partnership (TriDeP) Programme: report on innovative finance
+          models for the long-term financial sustainability of proposed projects,
+          and action reports to support program design.
+    \item Coursework: International Development Finance and South-South
+          Cooperation; Microeconomics of International Development; Dynamics of
+          Global Change and Local Responses.
+    \item Research papers: ``How the COVID pandemic affected substance consumption
+          in students''; ``Association between Democracy, Security and Peace''.
+  \end{itemize}
+
+  \item[2017--2020] \textbf{BA in Journalism, Psychology and English},
+        CHRIST (Deemed to be University)
+\end{dated}
+
+% ---------------- J-PAL ----------------
+\section*{Research Experience}
+\begin{dated}
+  \item[2023--present] \textbf{Research Associate}, J-PAL South Asia\\
+  \textit{Identifying and Nurturing Math Talent}
+  \begin{itemize}
+    \item Developed the research design through piloting; wrote standard operating
+          procedures and designed operational solutions using available technology.
+    \item Planned and allotted weekly tasks for the project team; managed over 100
+          surveyors during screening.
+    \item Prepared field plans and trained survey staff to collect data across 10
+          districts of Tamil Nadu; designed survey forms and data-entry portals for
+          participant engagement data.
+    \item Built high-frequency data-quality checks and a dashboard giving the
+          research team daily engagement statistics and analyses.
+    \item Organised phone-survey teams to monitor treatment groups.
+    \item Liaised with the Tamil Nadu School Education Department on permissions and
+          program design; managed survey and intervention vendors.
+  \end{itemize}
+
+  \item[2023] \textbf{Research Associate}, J-PAL South Asia\\
+  \textit{Gay Rights in India}
+  \begin{itemize}
+    \item Piloted assessments to develop the survey design.
+    \item Trained and managed field staff, prepared field plans and carried out data
+          collection, with high-frequency and data-quality checks.
+    \item Procured a large volume of goods for distribution to participants.
+  \end{itemize}
+\end{dated}
+
+% ---------------- Previous ----------------
+\section*{Other Experience}
+\begin{dated}
+  \item[2021] \textbf{The Asia Foundation}, India Development Partnership Activity\\
+  Action reports for the USAID--TAF initiative on India's development footprint in
+  South-East Asia and the Pacific Island Countries in renewable energy, disaster risk
+  resilience and climate-smart agriculture.
+
+  \item[2021] \textbf{Research Assistant}, The Asia Foundation\\
+  Profile of Indian foreign aid recipients in South Asia, Indian multilateralism, and
+  China's aid policy since mid-2019.
+
+  \item[2019] \textbf{Reporter}, News18 Tamil Nadu, Chennai\\
+  Broadcast news reporting.
+
+  \item[2018] \textbf{Reporter}, The New Indian Express, Thiruvananthapuram\\
+  Features, news and political reports, including a special report on the Malayali
+  diaspora in Kanyakumari.
+\end{dated}
+
+% ---------------- Articles ----------------
+\section*{Published Articles}
+\begin{dated}
+  \item[2021] ``Increasing Age of Marriage: Do Women Stand to Gain Anything?''
+        \textit{NewsClick}, 8 March.
+        \href{https://www.newsclick.in/Increasing-AgeMarriage-Do-Women-Stand-Gain-Anything}{[link]}
+  \item[2018] ``Kanyakumari's Malayali diaspora in a quandary.''
+        \textit{The New Indian Express}, 22 May.
+  \item[2018] ``Innovation hub cries for visitors.''
+        \textit{The New Indian Express}, 14 May.
+        \href{http://www.newindianexpress.com/Author/Akhilan-J-R/archive}{[archive]}
+\end{dated}
+
+% ---------------- Skills ----------------
+\section*{Skills}
+\begin{dated}
+  \item[Programming] R, Python (workflow automation, web scraping), Stata, MS Excel
+  \item[Design] Adobe Creative Cloud
+  \item[Operations] Managing large-scale survey teams; setting up research
+        operations systems
+\end{dated}
+
+\end{document}

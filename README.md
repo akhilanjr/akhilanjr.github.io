@@ -1,27 +1,12 @@
-# Minimal Mistakes remote theme starter
+# akhilanjr.github.io
 
-Click [**Use this template**](https://github.com/mmistakes/mm-github-pages-starter/generate) button above for the quickest method of getting started with the [Minimal Mistakes Jekyll theme](https://github.com/mmistakes/minimal-mistakes).
+Personal site built with Jekyll and the Minimal Mistakes theme.
 
-Contains basic configuration to get you a site with:
+## Updating the CV
+1. Edit `cv/cv.tex` (any text editor, or directly on github.com).
+2. Commit and push.
+3. GitHub Actions compiles the LaTeX and republishes the site (~2 min).
+   The PDF lives at `/assets/files/Akhilan_J_R_CV.pdf` and is shown on `/cv/`.
 
-- Sample posts.
-- Sample top navigation.
-- Sample author sidebar with social links.
-- Sample footer links.
-- Paginated home page.
-- Archive pages for posts grouped by year, category, and tag.
-- Sample about page.
-- Sample 404 page.
-- Site wide search.
-
-Replace sample content with your own and [configure as necessary](https://mmistakes.github.io/minimal-mistakes/docs/configuration/).
-
----
-
-## Troubleshooting
-
-If you have a question about using Jekyll, start a discussion on the [Jekyll Forum](https://talk.jekyllrb.com/) or [StackOverflow](https://stackoverflow.com/questions/tagged/jekyll). Other resources:
-
-- [Ruby 101](https://jekyllrb.com/docs/ruby-101/)
-- [Setting up a Jekyll site with GitHub Pages](https://jekyllrb.com/docs/github-pages/)
-- [Configuring GitHub Metadata](https://github.com/jekyll/github-metadata/blob/master/docs/configuration.md#configuration) to work properly when developing locally and avoid `No GitHub API authentication could be found. Some fields may be missing or have incorrect data.` warnings.
+If a build fails, check the **Actions** tab — a LaTeX error will be in the
+"Compile CV" step log.
