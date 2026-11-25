@@ -1,5 +1,7 @@
 main:
   - title: "CV"
     url: /cv/
+  - title: "Writing"
+    url: /writing/
   - title: "Photography"
     url: /photography/
