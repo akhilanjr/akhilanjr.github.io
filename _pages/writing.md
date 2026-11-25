@@ -3,12 +3,12 @@ title: "Writing"
 permalink: /writing/
 ---
 
-A long, long time ago (cannot believe it has been 8 years..), all I wanted to do was write for print media. The pieces from *The New Indian Express* were written in 2018 during my internship there, a stretch of reporting I still cherish. 
+A long, long time ago, all I wanted to do was write for *print* media. The pieces from *The New Indian Express* were written in 2018 during my internship there, a stretch of reporting I still cherish. 
 
 ## The New Indian Express (2018)
 
-- "Kanyakumari's Malayali diaspora in a quandary" — 22 May 2018
-- "Innovation hub cries for visitors" — 14 May 2018
+- "Kanyakumari's Malayali diaspora in a quandary". 22 May 2018
+- "Innovation hub cries for visitors". 14 May 2018
 
 All my reporting for the paper is on my [*New Indian Express* author page](https://www.newindianexpress.com/author/akhilan-jr).
 
