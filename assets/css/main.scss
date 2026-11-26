@@ -86,6 +86,64 @@ code, pre, kbd, samp {
   margin-bottom: 1em;
 }
 
+/* Paintings page: described paintings as features, the rest as galleries */
+#paintings {
+  overflow: hidden;
+  min-width: 0;
+  contain: inline-size;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+#paintings.is-ready {
+  opacity: 1;
+}
+.painting {
+  margin: 0;
+}
+.painting-gallery {
+  margin: 0 0 2.5em;
+}
+.painting-gallery .photo-row img {
+  object-fit: contain;
+}
+.painting-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 2em;
+  align-items: center;
+  margin: 0 0 3.5em;
+}
+.painting-feature--flip .painting-feature__image {
+  order: 2;
+}
+.painting-feature__image a,
+.painting-feature__image img {
+  display: block;
+}
+.painting-feature__image img {
+  width: 100%;
+  height: auto;
+  max-height: 85vh;
+  object-fit: contain;
+}
+.painting-feature__text h2 {
+  margin-top: 0;
+  border-bottom: none;
+}
+.painting-feature__details {
+  font-style: italic;
+  color: $muted-text-color;
+}
+@media (max-width: 700px) {
+  .painting-feature {
+    grid-template-columns: 1fr;
+    gap: 1em;
+  }
+  .painting-feature--flip .painting-feature__image {
+    order: 0;
+  }
+}
+
 /* CV page: PDF pages drawn as paper sheets */
 .cv-actions {
   display: flex;
