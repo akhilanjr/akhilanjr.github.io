@@ -1,0 +1,201 @@
+---
+title: "Paintings"
+permalink: /paintings/
+classes: wide
+---
+
+{% comment %}
+  HOW THIS PAGE WORKS
+  - Put paintings in assets/paintings/, named in the order you want them
+    shown: 1.jpg, 2.jpg, 3.jpg ... (10 comes after 9).
+  - To title or describe a painting, add a .txt file with the same number:
+    3.jpg + 3.txt. Format:
+
+        Title of the painting
+        Watercolour on paper, 30 x 40 cm, 2025      <- optional details line
+
+        The story of the painting. Blank lines
+        separate paragraphs.
+
+  - Paintings with a description are shown large with the text beside
+    them. The rest are shown together in a gallery, never cropped.
+{% endcomment %}
+
+{% assign files = site.static_files | where_exp: "f", "f.path contains '/assets/paintings/'" %}
+
+{% comment %} Sort by the number in the file name: 1, 2, ... 9, 10 {% endcomment %}
+{% assign keys = "" | split: "" %}
+{% assign txts = "" | split: "" %}
+{% for f in files %}
+  {% assign ext = f.extname | downcase %}
+  {% if ext == ".txt" %}
+    {% assign txts = txts | push: f.path %}
+  {% elsif ext == ".jpg" or ext == ".jpeg" or ext == ".png" or ext == ".webp" %}
+    {% assign n = f.basename | plus: 0 %}
+    {% assign key = "000000" | append: n | slice: -6, 6 | append: "|" | append: f.basename | append: "|" | append: f.path %}
+    {% assign keys = keys | push: key %}
+  {% endif %}
+{% endfor %}
+{% assign keys = keys | sort %}
+
+{% if keys.size == 0 %}
+<p>Paintings coming soon.</p>
+{% endif %}
+
+<noscript><style>#paintings { opacity: 1; }</style></noscript>
+
+<div id="paintings">
+{% for key in keys %}
+  {% assign parts = key | split: "|" %}
+  {% assign path = parts[2] %}
+  {% assign dir = path | split: "/" | pop | join: "/" %}
+  {% assign txt = dir | append: "/" | append: parts[1] | append: ".txt" %}
+  <figure class="painting"{% if txts contains txt %} data-txt="{{ txt | relative_url | uri_escape }}"{% endif %}>
+    <a href="{{ path | relative_url | uri_escape }}"><img src="{{ path | relative_url | uri_escape }}" alt="Painting {{ parts[1] }}"></a>
+  </figure>
+{% endfor %}
+</div>
+
+<script>
+(function () {
+  var box = document.getElementById("paintings");
+  if (!box) return;
+  var figures = Array.from(box.querySelectorAll(".painting"));
+  var GAP = 6, TARGET = 300;
+
+  function loaded(img) {
+    return new Promise(function (done) {
+      if (img.complete) return done();
+      img.addEventListener("load", done); img.addEventListener("error", done);
+    });
+  }
+
+  // Read "title / details / description" from a painting's .txt file
+  function readText(fig) {
+    if (!fig.dataset.txt) return Promise.resolve(null);
+    return fetch(fig.dataset.txt)
+      .then(function (r) { return r.ok ? r.text() : ""; })
+      .then(function (t) {
+        var paras = t.trim().split(/\r?\n\s*\r?\n/).map(function (p) { return p.trim(); }).filter(Boolean);
+        if (!paras.length) return null;
+        var head = paras[0].split(/\r?\n/).map(function (l) { return l.trim(); });
+        return { title: head[0], details: head.slice(1).join(" "), body: paras.slice(1) };
+      })
+      .catch(function () { return null; });
+  }
+
+  // ---- justified rows for the gallery runs (same idea as Photography) ----
+  function sumRatio(r) { return r.reduce(function (t, f) { return t + f.ratio; }, 0); }
+  function rowHeight(r, W) { return (W - GAP * (r.length - 1)) / sumRatio(r); }
+  function layoutRows(container, items) {
+    container.replaceChildren();
+    var W = container.clientWidth, rows = [], row = [];
+    if (W < 560) { items.forEach(function (f) { rows.push([f]); }); items = []; }
+    items.forEach(function (f) {
+      var withIt = row.concat([f]);
+      if (row.length && rowHeight(withIt, W) < TARGET) {
+        if (Math.abs(rowHeight(withIt, W) - TARGET) <= Math.abs(rowHeight(row, W) - TARGET)) { rows.push(withIt); row = []; }
+        else { rows.push(row); row = [f]; }
+      } else { row = withIt; }
+    });
+    if (row.length) {
+      var prev = rows.length ? rows[rows.length - 1] : null, leftover = row.slice();
+      leftover.partial = true;
+      var best = { cost: rowHeight(row, W) >= TARGET ? 0.3 * TARGET : Math.max(0.3 * TARGET, TARGET - rowHeight(row, W)), rows: [leftover] };
+      if (prev) {
+        var both = prev.concat(row), merged = Math.abs(rowHeight(both, W) - TARGET);
+        if (merged < best.cost) best = { cost: merged, rows: [both], replace: true };
+        for (var c = 1; c < both.length; c++) {
+          var r1 = both.slice(0, c), r2 = both.slice(c);
+          var cost = Math.max(Math.abs(rowHeight(r1, W) - TARGET), Math.abs(rowHeight(r2, W) - TARGET));
+          if (cost < best.cost) best = { cost: cost, rows: [r1, r2], replace: true };
+        }
+      }
+      if (best.replace) rows.pop();
+      rows = rows.concat(best.rows);
+    }
+    rows.forEach(function (r) {
+      var h = rowHeight(r, W);
+      if (r.partial) h = Math.min(h, TARGET);
+      var line = document.createElement("div");
+      line.className = "photo-row";
+      r.forEach(function (f) {
+        f.link.style.width = (f.ratio * h) + "px";
+        f.link.style.height = h + "px";
+        line.appendChild(f.link);
+      });
+      container.appendChild(line);
+    });
+  }
+
+  Promise.all(figures.map(function (fig) {
+    var img = fig.querySelector("img");
+    return Promise.all([loaded(img), readText(fig)]).then(function (res) {
+      var info = res[1];
+      var link = fig.querySelector("a");
+      if (info && info.title) {
+        link.title = info.title;                       // lightbox caption
+        img.alt = info.title;
+      }
+      return {
+        fig: fig, link: link, info: info,
+        ratio: img.naturalWidth ? img.naturalWidth / img.naturalHeight : 1,
+        featured: !!(info && info.body.length)          // has a description
+      };
+    });
+  })).then(function (items) {
+    // Walk in order: described paintings become features, the rest
+    // between them are gathered into gallery runs.
+    box.replaceChildren();
+    var runs = [], run = null, side = 0;
+    items.forEach(function (it) {
+      if (!it.featured) {
+        if (!run) {
+          run = { el: document.createElement("div"), items: [] };
+          run.el.className = "painting-gallery";
+          box.appendChild(run.el);
+          runs.push(run);
+        }
+        run.items.push(it);
+        return;
+      }
+      run = null;
+      var feat = document.createElement("article");
+      feat.className = "painting-feature" + (side++ % 2 ? " painting-feature--flip" : "");
+      var pic = document.createElement("div");
+      pic.className = "painting-feature__image";
+      pic.appendChild(it.link);
+      var text = document.createElement("div");
+      text.className = "painting-feature__text";
+      var h = document.createElement("h2");
+      h.textContent = it.info.title;
+      text.appendChild(h);
+      if (it.info.details) {
+        var d = document.createElement("p");
+        d.className = "painting-feature__details";
+        d.textContent = it.info.details;
+        text.appendChild(d);
+      }
+      it.info.body.forEach(function (para) {
+        var p = document.createElement("p");
+        p.textContent = para.replace(/\s*\r?\n\s*/g, " ");
+        text.appendChild(p);
+      });
+      feat.appendChild(pic);
+      feat.appendChild(text);
+      box.appendChild(feat);
+    });
+
+    function draw() { runs.forEach(function (r) { layoutRows(r.el, r.items); }); }
+    draw();
+    box.classList.add("is-ready");
+
+    var lastWidth = box.clientWidth, pending = false;
+    new ResizeObserver(function () {
+      if (pending || box.clientWidth === lastWidth) return;
+      pending = true;
+      requestAnimationFrame(function () { pending = false; lastWidth = box.clientWidth; draw(); });
+    }).observe(box);
+  });
+})();
+</script>
